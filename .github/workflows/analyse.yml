@@ -1,0 +1,74 @@
+name: IG Intelligence
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  analyse:
+    name: Run Analysis & Generate Reports
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Analysis runs from committed processed CSVs — no raw data or token needed.
+      # (Skips gracefully if no processed data exists yet.)
+      - name: Run advanced statistical analysis
+        run: node src/advanced_analysis.js || echo "advanced analysis skipped (no processed data yet)"
+
+      - name: Generate stakeholder report
+        run: node src/generate_stakeholder_report.js || echo "stakeholder skipped"
+
+      - name: Generate combined report from config + CSVs
+        run: node src/generate_combined_report.js || echo "combined skipped"
+
+      - name: Set canonical combined report
+        run: cp reports/combined_report.generated.tex reports/combined_report.tex 2>/dev/null || true
+
+      - name: Install Tectonic (LaTeX engine)
+        uses: wtfjoke/setup-tectonic@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compile reports to PDF
+        run: |
+          cd reports
+          tectonic stakeholder_report.tex 2>&1 || echo "stakeholder PDF skipped"
+          tectonic combined_report.tex 2>&1 || echo "combined PDF skipped"
+          ls -lh *.pdf 2>/dev/null || echo "no PDFs"
+
+      - name: Upload reports as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ig-intelligence-reports-${{ github.run_number }}
+          path: |
+            reports/stakeholder_report.md
+            reports/stakeholder_report.pdf
+            reports/combined_report.tex
+            reports/combined_report.pdf
+            reports/advanced_analysis_report.md
+            reports/figures/
+          retention-days: 90
+          if-no-files-found: ignore
+
+      - name: Commit generated outputs back to repo
+        if: github.event_name == 'push'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/processed/*.csv reports/ || true
+          git diff --staged --quiet || git commit -m "ci: regenerate analysis and reports [skip ci]"
+          git push || echo "Nothing to push"

@@ -1,0 +1,4 @@
+# Copy to config.ps1 (gitignored) and paste your Apify token. Never commit config.ps1.
+$env:APIFY_TOKEN = "apify_api_XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+$env:ACTOR_ID = "apify~instagram-scraper"
+$env:APIFY_BASE_URL = "https://api.apify.com/v2"

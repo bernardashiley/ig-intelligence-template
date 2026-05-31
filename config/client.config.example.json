@@ -1,0 +1,54 @@
+{
+  "_readme": "Copy to client.config.json (or run `npm run init`) and fill in. Every script reads from client.config.json; this .example file is the documented template.",
+
+  "client": {
+    "name":             "Client Display Name",
+    "short_name":       "clienthandle",
+    "handle":           "clienthandle",
+    "data_prefix":      "clienthandle",
+    "instagram_url":    "https://www.instagram.com/clienthandle/",
+    "category":         "Restaurant and Venue",
+    "location":         "",
+    "bio":              "",
+    "phone":            "",
+    "whatsapp":         "",
+    "menu_url":         "",
+    "maps_url":         "",
+    "booking_platform": "WhatsApp or phone"
+  },
+
+  "report": {
+    "prepared_by":    "Your Name",
+    "organisation":   "Your Firm",
+    "classification": "Confidential",
+    "date":           "auto"
+  },
+
+  "brand": {
+    "primary_hex": "1B3A2D",
+    "accent_hex":  "C9A84C",
+    "mid_hex":     "2D6A4F",
+    "light_hex":   "D8F3DC",
+    "blue_hex":    "2E86AB",
+    "purple_hex":  "7B2D8B",
+    "grey_hex":    "4B5563",
+    "rule_hex":    "D1D5DB"
+  },
+
+  "scrape": {
+    "posts_limit":       300,
+    "reels_limit":       150,
+    "mentions_limit":    150,
+    "months_back":       18,
+    "comments_top_n":    25,
+    "comments_per_post": 50
+  },
+
+  "analysis": {
+    "mc_seed":              20260530,
+    "mc_iterations":        10000,
+    "bootstrap_iterations": 5000,
+    "alpha":                0.05,
+    "bonferroni_tests":     6
+  }
+}
