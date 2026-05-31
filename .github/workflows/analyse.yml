@@ -26,6 +26,9 @@ jobs:
 
       # Analysis runs from committed processed CSVs — no raw data or token needed.
       # (Skips gracefully if no processed data exists yet.)
+      - name: Run test harness (statistical validity + edge cases)
+        run: node test/run_tests.js
+
       - name: Run advanced statistical analysis
         run: node src/advanced_analysis.js || echo "advanced analysis skipped (no processed data yet)"
 

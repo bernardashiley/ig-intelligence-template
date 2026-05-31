@@ -218,4 +218,5 @@ function main(){
   for(const cl of clusters) console.log(`  C${cl.cluster}  n=${String(cl.size).padStart(3)} (${String(cl.share_pct).padStart(4)}%)  avgEng=${String(cl.avg_engagement).padStart(5)}  | ${cl.top_terms}`);
 }
 
-main();
+module.exports = { makePrng, tokenize, dot, l2, kmeans, silhouette, pca2 };
+if (require.main === module) main();
