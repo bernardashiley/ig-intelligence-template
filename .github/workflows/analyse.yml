@@ -29,6 +29,12 @@ jobs:
       - name: Run advanced statistical analysis
         run: node src/advanced_analysis.js || echo "advanced analysis skipped (no processed data yet)"
 
+      - name: Discover content structure (unsupervised clustering)
+        run: node src/discover_structure.js || echo "structure discovery skipped"
+
+      - name: Generate structure-discovery report
+        run: node src/generate_structure_report.js || echo "structure report skipped"
+
       - name: Generate stakeholder report
         run: node src/generate_stakeholder_report.js || echo "stakeholder skipped"
 
@@ -59,6 +65,7 @@ jobs:
             reports/stakeholder_report.pdf
             reports/combined_report.tex
             reports/combined_report.pdf
+            reports/structure_discovery_report.md
             reports/advanced_analysis_report.md
             reports/figures/
           retention-days: 90
